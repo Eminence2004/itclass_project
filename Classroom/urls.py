@@ -1,7 +1,10 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from .views import RegisterView
-from .views import AssignmentListCreateView, SubmissionListCreateView
+from .views import (
+    AssignmentListCreateView, SubmissionListCreateView,
+    AnnouncementListCreateView, DiscussionListCreateView, ReplyListCreateView
+)
 
 
 urlpatterns = [
@@ -10,4 +13,9 @@ urlpatterns = [
     path('login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
      path('assignments/', AssignmentListCreateView.as_view(), name='assignment-list'),
     path('submissions/', SubmissionListCreateView.as_view(), name='submission-list'),
+     path('assignments/', AssignmentListCreateView.as_view(), name='assignment-list'),
+    path('submissions/', SubmissionListCreateView.as_view(), name='submission-list'),
+    path('announcements/', AnnouncementListCreateView.as_view(), name='announcement-list'),
+    path('discussions/', DiscussionListCreateView.as_view(), name='discussion-list'),
+    path('replies/', ReplyListCreateView.as_view(), name='reply-list'),
 ]
