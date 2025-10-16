@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'classroom',    
     'rest_framework',
     'rest_framework_simplejwt',
+    'rest_framework.authtoken',
 ]
 
 AUTH_USER_MODEL = 'classroom.User'
@@ -47,8 +48,13 @@ AUTH_USER_MODEL = 'classroom.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+        'rest_framework.authentication.BasicAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
 } 
 
 

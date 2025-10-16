@@ -3,6 +3,17 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.conf import settings
 
+
+class Classroom(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    instructor = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='classrooms'
+    )
+
+    def __str__(self):
+        return self.name
+
 class User(AbstractUser):
     ROLE_CHOICES = (
         ('student', 'Student'),
@@ -11,7 +22,7 @@ class User(AbstractUser):
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='student')
 
     def __str__(self):
-        return self.username
+        return f"{self.username} ({self.role})"
     
 class Assignment(models.Model):
     instructor = models.ForeignKey(
@@ -28,7 +39,7 @@ class Assignment(models.Model):
 
 class Submission(models.Model):
     assignment = models.ForeignKey(
-        Assignment, on_delete=models.CASCADE, related_name='submissions'
+        'Assignment', on_delete=models.CASCADE, related_name='submissions'
     )
     student = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='submissions'
@@ -36,10 +47,10 @@ class Submission(models.Model):
     file = models.FileField(upload_to='submissions/')
     grade = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     submitted_at = models.DateTimeField(auto_now_add=True)
+    content = models.TextField()
 
     def __str__(self):
         return f"{self.student.username} - {self.assignment.title}"
-
 
 # --- Announcements ---
 class Announcement(models.Model):
