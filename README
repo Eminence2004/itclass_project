@@ -1,0 +1,112 @@
+🏆 Capstone Project – Campus Learning Platform API
+Project Overview
+
+This project is a backend API for a campus learning platform designed for instructors and students. It supports:
+
+Role-based authentication (student and instructor)
+
+Assignments & submissions
+
+Announcements
+
+Discussion forum with replies/comments
+
+Grading and permission management
+
+The API is built with Django REST Framework and uses JWT authentication.
+
+Table of Contents
+
+Installation
+
+Setup & Running
+
+Authentication
+
+API Endpoints
+
+Role-Based Permissions
+
+Project Progress
+
+Author
+
+Installation
+# Clone the repository
+git clone <https://github.com/Eminence2004/itclass_project/tree/master>
+cd <https://github.com/Eminence2004/itclass_project/tree/master>
+
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # Linux/macOS
+venv\Scripts\activate     # Windows
+
+# Install dependencies
+pip install -r requirements.txt
+
+Setup & Running
+# Apply migrations
+python manage.py migrate
+
+# Create a superuser (optional)
+python manage.py createsuperuser
+
+# Run the server
+python manage.py runserver
+
+
+Access API at: http://127.0.0.1:8000/
+
+Authentication
+
+Register: POST /register/
+
+Login (JWT): POST /login/
+
+Refresh token: POST /login/refresh/
+
+Current user info: GET /me/ (requires JWT)
+
+All endpoints requiring authentication must include the header:
+
+Authorization: Bearer <access_token>
+
+API Endpoints
+Endpoint	Method	Permission	Notes
+/assignments/	GET	Authenticated	List all assignments
+/assignments/	POST	Instructor only	Create assignment
+/submissions/	GET	Authenticated	List all submissions
+/submissions/	POST	Student only	Submit assignment
+/submissions/<id>/grade/	PATCH	Instructor only	Grade a submission
+/announcements/	GET	Authenticated	List announcements
+/announcements/	POST	Instructor only	Create announcement
+/announcements/<id>/	PUT/PATCH	Instructor only	Update announcement
+/announcements/<id>/	DELETE	Instructor only	Delete announcement
+/discussions/	GET	Authenticated	List discussions
+/discussions/	POST	Instructor only	Create discussion
+/discussions/<id>/	PUT/PATCH	Instructor only	Update discussion
+/discussions/<id>/	DELETE	Instructor only	Delete discussion
+/discussions/<id>/reply/	POST	Authenticated	Post a reply/comment
+/replies/	GET	Authenticated	List all replies
+Role-Based Permissions
+Role	Permissions
+Student	View assignments, view announcements, view discussions, submit assignments, post replies/comments
+Instructor	Create/update/delete assignments, create/update/delete announcements, create/update/delete discussions, grade submissions
+Project Progress / Milestones
+Week	Milestone / Task	Status
+1	Project setup & environment configuration	✅ Completed
+1	User model & authentication setup	✅ Completed
+2	Assignment & submission models	✅ Completed
+2	Assignment CRUD & submission endpoints	✅ Completed
+3	Announcement & discussion models	✅ Completed
+3	Announcement CRUD & discussion list endpoints	✅ Completed
+4	Role-based permissions (student vs instructor)	✅ Completed
+4	Polished API responses with success messages	✅ Completed
+4	Replies/comments functionality	✅ Completed
+4	Endpoint routing & DRF ViewSets for announcements & discussions	✅ Completed
+Author
+
+Daniel Kyeremateng Amartey
+Email: danielkyerematengamartey@gmail.com
+
+GitHub: <Eminence2004>
