@@ -1,9 +1,9 @@
-# classroom/models.py
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.conf import settings
 
 
+# -------------------- Classroom --------------------
 class Classroom(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
@@ -14,6 +14,8 @@ class Classroom(models.Model):
     def __str__(self):
         return self.name
 
+
+# -------------------- Custom User --------------------
 class User(AbstractUser):
     ROLE_CHOICES = (
         ('student', 'Student'),
@@ -23,7 +25,9 @@ class User(AbstractUser):
 
     def __str__(self):
         return f"{self.username} ({self.role})"
-    
+
+
+# -------------------- Assignment --------------------
 class Assignment(models.Model):
     instructor = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='assignments'
@@ -31,12 +35,14 @@ class Assignment(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     due_date = models.DateTimeField()
+    file = models.FileField(upload_to='assignments/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title
 
 
+# -------------------- Submission --------------------
 class Submission(models.Model):
     assignment = models.ForeignKey(
         'Assignment', on_delete=models.CASCADE, related_name='submissions'
@@ -52,7 +58,8 @@ class Submission(models.Model):
     def __str__(self):
         return f"{self.student.username} - {self.assignment.title}"
 
-# --- Announcements ---
+
+# -------------------- Announcement --------------------
 class Announcement(models.Model):
     instructor = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='announcements'
@@ -65,7 +72,7 @@ class Announcement(models.Model):
         return self.title
 
 
-# --- Discussion Forum ---
+# -------------------- Discussion Forum --------------------
 class Discussion(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='discussions'
@@ -89,4 +96,31 @@ class Reply(models.Model):
 
     def __str__(self):
         return f"Reply by {self.user.username}"
+
+
+# -------------------- Notification (NEW) --------------------
+class Notification(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="notifications"
+    )
+    message = models.CharField(max_length=255)
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Notification for {self.user.username}: {self.message[:30]}"
+    
+
+#-------------------- Voice Call --------------------
+class VoiceCall(models.Model):
+    channel_name = models.CharField(max_length=255, unique=True)
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='voice_calls'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    ended_at = models.DateTimeField(null=True, blank=True)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"VoiceCall by {self.created_by.username} - {self.channel_name}"
 

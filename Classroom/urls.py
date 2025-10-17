@@ -1,6 +1,8 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
+# Import only the base views first
 from .views import (
     RegisterView,
     CurrentUserView,
@@ -9,7 +11,10 @@ from .views import (
     GradeSubmissionView,
     ReplyListCreateView,
     AnnouncementViewSet,
-    DiscussionViewSet
+    DiscussionViewSet,
+    GenerateVoiceCallToken,
+    EndVoiceCall,
+    NotificationListView,  # ✅ make sure this is now defined in views.py
 )
 
 # -------------------- Router for ViewSets --------------------
@@ -35,6 +40,13 @@ urlpatterns = [
     # Replies (standalone listing)
     path('replies/', ReplyListCreateView.as_view(), name='reply-list'),
 
-    # Announcements & Discussions via router
+    # Notifications
+    path('notifications/', NotificationListView.as_view(), name='notification-list'),
+
+    # Announcements & Discussions
     path('', include(router.urls)),
+
+    # Voice Call Endpoints
+    path('voice-call/token/', GenerateVoiceCallToken.as_view(), name='voice-call-token'),
+    path('voice-call/end/', EndVoiceCall.as_view(), name='end-voice-call'),
 ]
